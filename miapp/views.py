@@ -1,34 +1,36 @@
-from django.shortcuts import render
-#  ------  classes ---------
-class Car:
-    def __init__(self, brand, model, year, color):
-        self.brand = brand
-        self.model = model
-        self.year = year
-        self.color = color
-    
-    def info(self):
-        return f"{self.brand} {self.model} ({self.year}) - {self.color}"
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Product
 
-class Person:
-    def __init__(self, name, age, occupation):
-        self.name = name
-        self.age = age
-        self.occupation = occupation
-    
-    def greeting(self):
-        return f"Hi, I am {self.name}, I am {self.age} years old and I am a {self.occupation}."
+# List all the products
+class ProductListView(ListView):
+    model = Product
+    template_name = 'product_list.html'
+    context_object_name = 'products'
 
-# --------------view---------------
+# Show one product detail
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'product_detail.html'
 
-def home(request):
-    # instantiating the objects
-    car1 = Car("Toyota", "Supra", 2022, "White")
-    person1 = Person("Mike Schmidt", 28, "Mechanic")
-    
-    context = {
-        'car': car1,
-        'person': person1,
-    }
-    
-    return render(request, 'home.html', context)
+# Create a new product
+# reverse lazy to redirect back, its neat
+class ProductCreateView(CreateView):
+    model = Product
+    template_name = 'product_form.html'
+    fields = ['name', 'price', 'description', 'seller', 'color', 'product_dimensions']
+    success_url = reverse_lazy('product_list')
+
+# Update the existing product
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'product_form.html'
+    fields = ['name', 'price', 'description', 'seller', 'color', 'product_dimensions']
+    success_url = reverse_lazy('product_list')
+
+# Delete product
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'product_confirm_delete.html'
+    success_url = reverse_lazy('product_list')

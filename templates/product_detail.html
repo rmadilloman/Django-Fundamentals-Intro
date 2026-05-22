@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Detail</title>
+</head>
+<body>
+    <h1>{{ object.name }}</h1>
+    <p><strong>Price:</strong> ${{ object.price }}</p>
+    <p><strong>Seller:</strong> {{ object.seller }}</p>
+    <p><strong>Color:</strong> {{ object.color|default:"Not specified" }}</p>
+    <p><strong>Dimensions:</strong> {{ object.product_dimensions|default:"Not specified" }}</p>
+    <p><strong>Description:</strong> {{ object.description|default:"No description" }}</p>
+    
+    <br>
+    <a href="{% url 'product_list' %}">Back to the list</a>
+</body>
+</html>
